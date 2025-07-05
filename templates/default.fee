@@ -1,0 +1,5 @@
+mesh = "mesh.vtu"
+
+{boundary_conditions}
+
+solve
