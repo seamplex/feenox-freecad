@@ -1,9 +1,9 @@
-def write_gmsh_geo(analysis_obj, geo_filename="mesh.geo"):
+def write_gmsh_geo(analysis_obj, geo_filename="mesh.geo", brep_filename="cad.brep"):
     with open(geo_filename, 'w') as f:
         f.write('// FeenoX Workbench - Auto-generated .geo file\n')
-        f.write('Merge "geometry.brep";\n\n')
-        f.write('Mesh.CharacteristicLengthMin = 0.5;\n')
-        f.write('Mesh.CharacteristicLengthMax = 1.0;\n\n')
+        f.write('Merge "%s";\n\n'@(brep_filename))
+        f.write('//Mesh.CharacteristicLengthMin = 0.5;\n')
+        f.write('//Mesh.CharacteristicLengthMax = 1.0;\n\n')
 
         surface_index = 1
         for bc in analysis_obj.boundary_conditions:

@@ -58,6 +58,14 @@ class FeenoXAnalysisWidget(QtWidgets.QWidget):
         layout.addWidget(QtWidgets.QLabel("Problem Type:"))
         layout.addWidget(self.problem_combo)
 
+        self.mesh_combo = QtWidgets.QComboBox()
+        self.mesh_combo.addItems(self.analysis.feenox_meshes)
+        if self.analysis.active_mesh:
+            self.mesh_combo.setCurrentText(self.analysis.active_mesh)
+        self.mesh_combo.currentTextChanged.connect(self.on_mesh_selected)
+        layout.addWidget(QtWidgets.QLabel("Select mesh to use:"))
+        layout.addWidget(self.mesh_combo)
+
         self.bc_container = QtWidgets.QVBoxLayout()
         self.bc_group_box = QtWidgets.QGroupBox("Boundary Conditions")
         self.bc_group_box.setLayout(self.bc_container)
@@ -150,7 +158,7 @@ class FeenoXAnalysisWidget(QtWidgets.QWidget):
             brep_filename = f"{obj.Name}.brep"
             obj.Shape.exportBrep(brep_filename)
 
-        write_gmsh_geo(self.analysis, "mesh.geo")
+        write_gmsh_geo(self.analysis, "mesh.geo", brep_filename)
 
         try:
             subprocess.run(["gmsh", "mesh.geo", "-3", "-format", "vtk", "-o", "mesh.vtk"], check=True)
@@ -191,3 +199,12 @@ class FeenoXAnalysisWidget(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.warning(None, "No Result File", f"{result_file} not found.")
         except Exception as e:
             QtWidgets.QMessageBox.critical(None, "Solve Error", str(e))
+
+
+    def on_mesh_selected(self, mesh_name):
+        self.analysis.set_active_mesh(mesh_name)
+        doc = FreeCAD.ActiveDocument
+        for name in self.analysis.feenox_meshes:
+            obj = doc.getObject(name)
+            if obj:
+                obj.ViewObject.Visibility = (name == mesh_name)

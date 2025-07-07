@@ -2,6 +2,8 @@ class FeenoXAnalysis:
     def __init__(self, problem_type="mechanical"):
         self.problem_type = problem_type
         self.boundary_conditions = []
+        self.feenox_meshes = []  # List of mesh names
+        self.active_mesh = ""    # Name of the selected mesh
 
     def add_boundary_condition(self, bc):
         self.boundary_conditions.append(bc)
