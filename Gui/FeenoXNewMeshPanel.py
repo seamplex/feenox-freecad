@@ -1,12 +1,18 @@
 from PySide2 import QtWidgets
 import FreeCAD, os, subprocess, Mesh
 
+
 class FeenoXNewMeshPanel(QtWidgets.QWidget):
-    def __init__(self, analysis_obj):
+    def __init__(self, solid_obj):
         super().__init__()
-        self.analysis = analysis_obj
+        self.solid_obj = solid_obj
         self.brep_exported = False
         self.init_ui()
+
+    def export_brep(self):
+        brep_filename = f"{self.solid_obj.Name}.brep"
+        self.solid_obj.Shape.exportBrep(brep_filename)
+        QtWidgets.QMessageBox.information(None, "Export", f"BREP exported as {brep_filename}")
 
     def init_ui(self):
         layout = QtWidgets.QVBoxLayout()

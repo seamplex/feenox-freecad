@@ -2,8 +2,8 @@ from PySide2.QtWidgets import QWidget, QVBoxLayout
 from Gui.FeenoXNewMeshPanel import FeenoXNewMeshPanel
 
 class FeenoXNewMeshTaskPanel:
-    def __init__(self, analysis_obj):
-        self.widget = FeenoXNewMeshPanel(analysis_obj)
+    def __init__(self, solid_obj):
+        self.widget = FeenoXNewMeshPanel(solid_obj)
         self.form = QWidget()
         layout = QVBoxLayout()
         layout.addWidget(self.widget)
